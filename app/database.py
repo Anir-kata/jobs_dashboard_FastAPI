@@ -13,3 +13,12 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
+
+def get_db():
+    """Yield a database session. Used as FastAPI dependency."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
