@@ -1,7 +1,7 @@
 # Backend de Job avec FastAPI
 
-<!-- CI status badge: replace <OWNER> and <REPO> with your GitHub repo -->
-![CI](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml/badge.svg)
+<!-- CI status badge: workflow runs on GitHub Actions -->
+![CI](https://github.com/Anir-kata/job_backend_FastAPI/actions/workflows/ci.yml/badge.svg)
 
 Ce dépôt contient une application FastAPI simple qui fournit des opérations CRUD pour une ressource `Job`, supportée par une base de données PostgreSQL utilisant SQLAlchemy.
 
