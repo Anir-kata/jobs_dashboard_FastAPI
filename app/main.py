@@ -1,9 +1,23 @@
-from fastapi import FastAPI, Depends, HTTPException
+import logging
+from fastapi import FastAPI, Depends, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from contextlib import asynccontextmanager
 
 from . import models, schemas, database
+
+# setup basic logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# middleware to log incoming requests
+
+async def log_request(request: Request, call_next):
+    logger.info(f"Request: {request.method} {request.url}")
+    response = await call_next(request)
+    logger.info(f"Response status: {response.status_code}")
+    return response
 
 
 @asynccontextmanager
@@ -14,6 +28,15 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+# add middleware
+app.middleware('http')(log_request)
+# allow CORS for frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Use the shared database dependency from `app.database` so tests can override it
 from .database import get_db
