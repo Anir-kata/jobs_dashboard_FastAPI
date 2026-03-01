@@ -1,9 +1,18 @@
-body{font-family: Arial, sans-serif; padding: 20px}
-.container{max-width:900px;margin:0 auto}
-.jobform input{margin-right:8px;padding:6px}
-.jobs{list-style:none;padding:0}
-.jobs li{padding:8px 0;border-bottom:1px solid #eee}
-.row{display:flex;justify-content:space-between}
-.muted{color:#666;margin-left:8px}
-.actions button{background:#e53e3e;color:white;border:none;padding:6px 8px;border-radius:4px}
-.search input{margin-right:6px;padding:6px}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors;
+  }
+  .btn-secondary {
+    @apply px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors;
+  }
+  .btn-danger {
+    @apply px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors;
+  }
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+}

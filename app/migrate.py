@@ -1,7 +1,11 @@
 """
 Quick migration to add timestamps to existing jobs table.
-Run with: python app/migrate.py
+Run with: python -m app.migrate
 """
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from sqlalchemy import text
 from app.database import engine
 
