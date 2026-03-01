@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 
@@ -20,5 +20,5 @@ class JobUpdate(JobBase):
 class Job(JobBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    # Use Pydantic v2 config style
+    model_config = ConfigDict(from_attributes=True)
