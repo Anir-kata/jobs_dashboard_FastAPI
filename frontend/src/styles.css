@@ -1,0 +1,9 @@
+body{font-family: Arial, sans-serif; padding: 20px}
+.container{max-width:900px;margin:0 auto}
+.jobform input{margin-right:8px;padding:6px}
+.jobs{list-style:none;padding:0}
+.jobs li{padding:8px 0;border-bottom:1px solid #eee}
+.row{display:flex;justify-content:space-between}
+.muted{color:#666;margin-left:8px}
+.actions button{background:#e53e3e;color:white;border:none;padding:6px 8px;border-radius:4px}
+.search input{margin-right:6px;padding:6px}
