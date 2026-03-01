@@ -81,3 +81,20 @@ Pour exécuter les tests, installez les dépendances et lancez :
 pytest
 ```
 
+## 🖥 Frontend
+
+Un client React léger est inclus sous `frontend/`. Il consomme les endpoints de l'API pour
+créer et lister des emplois, effectuer des recherches et supprimer des entrées.
+
+Pour démarrer l'interface :
+
+```bash
+cd frontend
+npm install      # ou yarn
+npm run dev
+```
+
+Visitez ensuite `http://localhost:5173`. Le front-end attend
+l'API à `http://127.0.0.1:8000` par défaut.
+
+
