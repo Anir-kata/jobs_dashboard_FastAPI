@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+env/
+venv/
+*.sqlite3
+*.log
+
+# pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node / frontend
+/frontend/node_modules/
+/frontend/dist/
+/frontend/.env
+
+# Vite build
+/dist/
+
+# Certificates
+*.pem
+
+# GitHub Actions cache
+.github/actions/cache
