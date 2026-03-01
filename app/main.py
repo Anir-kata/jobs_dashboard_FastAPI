@@ -39,6 +39,27 @@ def read_jobs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return db.execute(stmt).scalars().all()
 
 
+@app.get("/jobs/search", response_model=list[schemas.Job], tags=["jobs"])
+def search_jobs(query: str | None = None, company: str | None = None, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    stmt = select(models.Job)
+    if query:
+        stmt = stmt.where(models.Job.title.contains(query))
+    if company:
+        stmt = stmt.where(models.Job.company == company)
+    stmt = stmt.offset(skip).limit(limit)
+    return db.execute(stmt).scalars().all()
+
+
+@app.post("/jobs/bulk", response_model=list[schemas.Job], tags=["jobs"])
+def bulk_create_jobs(jobs: list[schemas.JobCreate], db: Session = Depends(get_db)):
+    objs = [models.Job(**j.model_dump()) for j in jobs]
+    db.add_all(objs)
+    db.commit()
+    for o in objs:
+        db.refresh(o)
+    return objs
+
+
 @app.get("/jobs/{job_id}", response_model=schemas.Job, tags=["jobs"])
 def read_job(job_id: int, db: Session = Depends(get_db)):
     job = db.get(models.Job, job_id)
