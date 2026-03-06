@@ -1,0 +1,17 @@
+{
+  "name": "job-backend-fastapi-workspace",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently --kill-others --names backend,frontend --prefix-colors blue,green \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "python -m uvicorn app.main:app --reload",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "test": "npm run test:backend; npm run test:frontend",
+    "test:backend": "python -m pytest",
+    "test:frontend": "npm --prefix frontend run test -- --run"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

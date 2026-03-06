@@ -97,4 +97,26 @@ npm run dev
 Visitez ensuite `http://localhost:5173`. Le front-end attend
 l'API à `http://127.0.0.1:8000` par défaut.
 
+## ▶ Lancer Backend + Frontend ensemble
+
+Vous pouvez maintenant lancer tout le projet avec une seule commande depuis la racine `job_backend_FastAPI`:
+
+```bash
+npm install
+npm run dev
+```
+
+Cette commande démarre:
+
+- le backend FastAPI sur `http://127.0.0.1:8000`
+- le frontend Vite sur `http://localhost:5173`
+
+Scripts disponibles à la racine:
+
+```bash
+npm run dev        # backend + frontend en parallèle
+npm run build      # build frontend
+npm run test       # tests backend puis frontend
+```
+
 
