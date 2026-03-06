@@ -6,12 +6,21 @@ export default function JobList(){
   const [q, setQ] = useState('')
   const [company, setCompany] = useState('')
   const [loading, setLoading] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
+
+  function getMessage(error){
+    if (error?.message) return error.message
+    return 'Request failed. Please try again.'
+  }
 
   async function load(){
+    setErrorMsg('')
     setLoading(true)
     try {
       const data = await fetchJobs()
       setJobs(data)
+    } catch (error) {
+      setErrorMsg(getMessage(error))
     } finally {
       setLoading(false)
     }
@@ -21,10 +30,13 @@ export default function JobList(){
 
   async function onSearch(e){
     e.preventDefault()
+    setErrorMsg('')
     setLoading(true)
     try {
       const data = await searchJobs({query: q || undefined, company: company || undefined})
       setJobs(data)
+    } catch (error) {
+      setErrorMsg(getMessage(error))
     } finally {
       setLoading(false)
     }
@@ -32,12 +44,18 @@ export default function JobList(){
 
   async function onDelete(id){
     if (!window.confirm('Delete this job?')) return
-    await deleteJob(id)
-    load()
+    setErrorMsg('')
+    try {
+      await deleteJob(id)
+      await load()
+    } catch (error) {
+      setErrorMsg(getMessage(error))
+    }
   }
 
   return (
     <div className="space-y-5">
+      {errorMsg && <p className="alert-box alert-error">{errorMsg}</p>}
       <form onSubmit={onSearch} className="search-wrap">
         <input
           className="input-field flex-1 min-w-[200px]"

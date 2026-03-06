@@ -11,10 +11,10 @@ export default function App(){
 
       <header className="hero-wrap">
         <div className="max-w-6xl mx-auto px-4 py-10 md:py-14">
-          <p className="eyebrow mb-3">Career Command Center</p>
+          <p className="eyebrow mb-3">Career Center</p>
           <h1 className="hero-title">Anir Job Board</h1>
           <p className="hero-subtitle mt-4 max-w-3xl">
-            Post roles, scan opportunities, and move faster with a high-energy dashboard built for hiring flow.
+            Saving Opportunities for later research and easy access. Post your job openings, search for the perfect role, and manage your applications all in one place.
           </p>
         </div>
       </header>
