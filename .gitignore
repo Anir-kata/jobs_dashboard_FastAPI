@@ -29,8 +29,10 @@ Thumbs.db
 /frontend/.env
 /frontend/.env.*
 
-# Vite build
-/dist/
+# Docker
+.docker/
+__pycache__/
+*.sqlite3
 
 # Local env files
 .env

@@ -68,7 +68,7 @@ L'API sera disponible à `http://127.0.0.1:8000` et la documentation interactive
 - Les modèles SQLAlchemy se trouvent dans `app/models.py`.
 - La dépendance de session de base de données est configurée dans `app/main.py`.
 
-N'hésitez pas à étendre le schéma, ajouter une authentification ou intégrer Alembic pour les migrations !
+Il est possible aussi d'étendre le schéma, ajouter une authentification ou intégrer Alembic pour les migrations.
 
 ## 🧪 Tests
 
@@ -117,6 +117,55 @@ Scripts disponibles à la racine:
 npm run dev        # backend + frontend en parallèle
 npm run build      # build frontend
 npm run test       # tests backend puis frontend
+```
+
+## 🐳 Utiliser Docker Compose
+
+Pour lancer le projet entièrement dans Docker (avec Postgres inclus):
+
+### Prérequis
+- Docker et Docker Compose installés
+
+### Démarrer les services
+
+Depuis la racine du projet:
+
+```bash
+docker compose up
+```
+
+Ceci va démarrer:
+- **PostgreSQL** sur le port `5432` (données stockées dans un volume)
+- **Backend FastAPI** sur `http://localhost:8000`
+- **Frontend Vite** sur `http://localhost:5173`
+
+Les services sont configurés pour se découvrir automatiquement par le nom du container (`postgres`, `backend`, `frontend`).
+
+### Arrêter les services
+
+```bash
+docker compose down
+```
+
+Pour supprimer aussi les volumes de données (PostgreSQL):
+
+```bash
+docker compose down -v
+```
+
+### Logs en direct
+
+Voir tous les logs:
+
+```bash
+docker compose logs -f
+```
+
+Voir les logs d'un service spécifique:
+
+```bash
+docker compose logs -f backend
+docker compose logs -f frontend
 ```
 
 
