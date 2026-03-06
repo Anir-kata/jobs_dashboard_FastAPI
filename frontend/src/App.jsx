@@ -4,26 +4,35 @@ import JobForm from './components/JobForm'
 
 export default function App(){
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Job Board</h1>
-          <p className="text-sm text-gray-500">Powered by FastAPI + React</p>
+    <div className="app-shell min-h-screen">
+      <div className="background-grid" aria-hidden="true" />
+      <div className="orb orb-1" aria-hidden="true" />
+      <div className="orb orb-2" aria-hidden="true" />
+
+      <header className="hero-wrap">
+        <div className="max-w-6xl mx-auto px-4 py-10 md:py-14">
+          <p className="eyebrow mb-3">Career Command Center</p>
+          <h1 className="hero-title">Anir Job Board</h1>
+          <p className="hero-subtitle mt-4 max-w-3xl">
+            Post roles, scan opportunities, and move faster with a high-energy dashboard built for hiring flow.
+          </p>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        {/* Create Section */}
-        <section className="mb-8 bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Create New Job</h2>
+      <main className="max-w-6xl mx-auto px-4 pb-14 md:pb-20">
+        <section className="glass-panel mb-8 p-5 md:p-7 reveal-in">
+          <div className="section-header mb-5">
+            <h2 className="section-title">Create New Job</h2>
+            <span className="section-chip">Live Post</span>
+          </div>
           <JobForm />
         </section>
 
-        {/* List Section */}
-        <section className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Jobs</h2>
+        <section className="glass-panel p-5 md:p-7 reveal-in" style={{animationDelay: '120ms'}}>
+          <div className="section-header mb-5">
+            <h2 className="section-title">Jobs</h2>
+            <span className="section-chip">Realtime Feed</span>
+          </div>
           <JobList />
         </section>
       </main>

@@ -36,13 +36,13 @@ export default function JobForm(){
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={onSubmit} className="space-y-4 md:space-y-5">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
           className="input-field"
           value={title}
           onChange={e=>setTitle(e.target.value)}
-          placeholder="Job title"
+          placeholder="Title"
           required
         />
         <input
@@ -58,19 +58,19 @@ export default function JobForm(){
         onChange={e=>setDesc(e.target.value)}
         placeholder="Description"
       />
-      <div className="flex gap-2 pt-2">
+      <div className="flex flex-wrap gap-3 pt-2">
         <button
           type="submit"
           disabled={loading}
-          className="btn-primary disabled:opacity-50"
+          className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'Creating...' : 'Create Job'}
+          {loading ? 'Creating...' : 'Create'}
         </button>
         <button
           type="button"
           onClick={onBulk}
           disabled={loading}
-          className="btn-secondary disabled:opacity-50"
+          className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Loading...' : 'Add Sample Jobs'}
         </button>

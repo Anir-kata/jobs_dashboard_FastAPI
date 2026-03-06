@@ -37,9 +37,8 @@ export default function JobList(){
   }
 
   return (
-    <div className="space-y-4">
-      {/* Search */}
-      <form onSubmit={onSearch} className="flex gap-2 flex-wrap">
+    <div className="space-y-5">
+      <form onSubmit={onSearch} className="search-wrap">
         <input
           className="input-field flex-1 min-w-[200px]"
           placeholder="Search by title..."
@@ -56,38 +55,38 @@ export default function JobList(){
         <button type="button" onClick={load} className="btn-secondary">Reset</button>
       </form>
 
-      {/* Jobs List */}
       {loading && (
-        <div className="text-center py-8">
-          <p className="text-gray-500">Loading jobs...</p>
+        <div className="empty-state text-center py-10">
+          <p className="text-slate-200">Loading jobs...</p>
         </div>
       )}
 
       {!loading && jobs.length === 0 && (
-        <div className="text-center py-8">
-          <p className="text-gray-400">No jobs found. Try creating one!</p>
+        <div className="empty-state text-center py-10">
+          <p className="text-slate-200">No jobs found. Try creating one!</p>
         </div>
       )}
 
-      <div className="space-y-3">
-        {jobs.map(j => (
+      <div className="space-y-4">
+        {jobs.map((j, idx) => (
           <div
             key={j.id}
-            className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+            className="job-card"
+            style={{animationDelay: `${idx * 60}ms`}}
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-lg">{j.title}</h3>
+                <h3 className="font-semibold text-white text-lg leading-tight">{j.title}</h3>
                 {j.company && (
-                  <p className="text-sm text-blue-600 font-medium">{j.company}</p>
+                  <p className="text-sm text-cyan-300 font-medium mt-1">{j.company}</p>
                 )}
                 {j.description && (
-                  <p className="text-sm text-gray-600 mt-1">{j.description}</p>
+                  <p className="text-sm text-slate-200/90 mt-2">{j.description}</p>
                 )}
-                <div className="flex gap-4 mt-3 text-xs text-gray-500">
-                  {j.location && <span>{j.location}</span>}
+                <div className="flex flex-wrap gap-x-4 gap-y-2 mt-3 text-xs text-slate-300">
+                  {j.location && <span className="pill-data">{j.location}</span>}
                   {j.created_at && (
-                    <span>Created: {new Date(j.created_at).toLocaleDateString()}</span>
+                    <span className="pill-data">Created: {new Date(j.created_at).toLocaleDateString()}</span>
                   )}
                 </div>
               </div>
@@ -103,5 +102,4 @@ export default function JobList(){
       </div>
     </div>
   )
-}
 }
