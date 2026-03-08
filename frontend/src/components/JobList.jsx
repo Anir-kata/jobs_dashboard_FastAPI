@@ -10,7 +10,7 @@ export default function JobList(){
 
   function getMessage(error){
     if (error?.message) return error.message
-    return 'Request failed. Please try again.'
+    return 'La requete a echoue. Veuillez reessayer.'
   }
 
   async function load(){
@@ -26,7 +26,12 @@ export default function JobList(){
     }
   }
 
-  useEffect(()=>{ load() }, [])
+  useEffect(()=>{
+    load()
+    const onReload = () => load()
+    window.addEventListener('emplois:recharger', onReload)
+    return () => window.removeEventListener('emplois:recharger', onReload)
+  }, [])
 
   async function onSearch(e){
     e.preventDefault()
@@ -43,7 +48,7 @@ export default function JobList(){
   }
 
   async function onDelete(id){
-    if (!window.confirm('Delete this job?')) return
+    if (!window.confirm('Supprimer cet emploi ?')) return
     setErrorMsg('')
     try {
       await deleteJob(id)
@@ -59,29 +64,29 @@ export default function JobList(){
       <form onSubmit={onSearch} className="search-wrap">
         <input
           className="input-field flex-1 min-w-[200px]"
-          placeholder="Search by title..."
+          placeholder="Rechercher par titre..."
           value={q}
           onChange={e=>setQ(e.target.value)}
         />
         <input
           className="input-field flex-1 min-w-[200px]"
-          placeholder="Filter by company..."
+          placeholder="Filtrer par entreprise..."
           value={company}
           onChange={e=>setCompany(e.target.value)}
         />
-        <button type="submit" className="btn-primary">Search</button>
-        <button type="button" onClick={load} className="btn-secondary">Reset</button>
+        <button type="submit" className="btn-primary">Rechercher</button>
+        <button type="button" onClick={load} className="btn-secondary">Reinitialiser</button>
       </form>
 
       {loading && (
         <div className="empty-state text-center py-10">
-          <p className="text-slate-200">Loading jobs...</p>
+          <p className="text-slate-200">Chargement des emplois...</p>
         </div>
       )}
 
       {!loading && jobs.length === 0 && (
         <div className="empty-state text-center py-10">
-          <p className="text-slate-200">No jobs found. Try creating one!</p>
+          <p className="text-slate-200">Aucun emploi trouve. Essayez d'en creer un !</p>
         </div>
       )}
 
@@ -104,7 +109,7 @@ export default function JobList(){
                 <div className="flex flex-wrap gap-x-4 gap-y-2 mt-3 text-xs text-slate-300">
                   {j.location && <span className="pill-data">{j.location}</span>}
                   {j.created_at && (
-                    <span className="pill-data">Created: {new Date(j.created_at).toLocaleDateString()}</span>
+                    <span className="pill-data">Cree le : {new Date(j.created_at).toLocaleDateString()}</span>
                   )}
                 </div>
               </div>
@@ -112,7 +117,7 @@ export default function JobList(){
                 onClick={()=>onDelete(j.id)}
                 className="btn-danger ml-4 whitespace-nowrap"
               >
-                Delete
+                Supprimer
               </button>
             </div>
           </div>

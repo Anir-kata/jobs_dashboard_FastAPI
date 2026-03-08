@@ -11,7 +11,7 @@ export default function JobForm(){
 
   function getMessage(error){
     if (error?.message) return error.message
-    return 'Request failed. Please try again.'
+    return 'La requete a echoue. Veuillez reessayer.'
   }
 
   async function onSubmit(e){
@@ -22,8 +22,8 @@ export default function JobForm(){
     try {
       await createJob({title, company, description: desc})
       setTitle(''); setCompany(''); setDesc('')
-      window.dispatchEvent(new Event('jobs:reload'))
-      setSuccessMsg('Job created successfully.')
+      window.dispatchEvent(new Event('emplois:recharger'))
+      setSuccessMsg('Emploi cree avec succes.')
     } catch (error) {
       setErrorMsg(getMessage(error))
     } finally {
@@ -37,12 +37,12 @@ export default function JobForm(){
     setLoading(true)
     try {
       const jobs = [
-        {title: 'Senior Backend Engineer', company: 'TechCorp', description: 'Build scalable APIs'},
-        {title: 'Product Manager', company: 'StartupXYZ', description: 'Lead product strategy'}
+        {title: 'Ingenieur Backend Senior', company: 'TechCorp', description: 'Construire des API evolutives'},
+        {title: 'Chef de Produit', company: 'StartupXYZ', description: 'Piloter la strategie produit'}
       ]
       await bulkCreate(jobs)
-      window.dispatchEvent(new Event('jobs:reload'))
-      setSuccessMsg('Sample jobs added successfully.')
+      window.dispatchEvent(new Event('emplois:recharger'))
+      setSuccessMsg('Emplois de demonstration ajoutes avec succes.')
     } catch (error) {
       setErrorMsg(getMessage(error))
     } finally {
@@ -59,14 +59,14 @@ export default function JobForm(){
           className="input-field"
           value={title}
           onChange={e=>setTitle(e.target.value)}
-          placeholder="Title"
+          placeholder="Titre"
           required
         />
         <input
           className="input-field"
           value={company}
           onChange={e=>setCompany(e.target.value)}
-          placeholder="Company name"
+          placeholder="Nom de l'entreprise"
         />
       </div>
       <input
@@ -81,7 +81,7 @@ export default function JobForm(){
           disabled={loading}
           className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'Creating...' : 'Create'}
+          {loading ? 'Creation...' : 'Creer'}
         </button>
         <button
           type="button"
@@ -89,7 +89,7 @@ export default function JobForm(){
           disabled={loading}
           className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'Loading...' : 'Add Sample Jobs'}
+          {loading ? 'Chargement...' : 'Ajouter des emplois exemples'}
         </button>
       </div>
     </form>

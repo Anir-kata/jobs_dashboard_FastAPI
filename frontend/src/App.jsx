@@ -11,10 +11,10 @@ export default function App(){
 
       <header className="hero-wrap">
         <div className="max-w-6xl mx-auto px-4 py-10 md:py-14">
-          <p className="eyebrow mb-3">Career Center</p>
-          <h1 className="hero-title">Anir Job Board</h1>
+          <p className="eyebrow mb-3">Centre Carriere</p>
+          <h1 className="hero-title">Tableau des Emplois Anir</h1>
           <p className="hero-subtitle mt-4 max-w-3xl">
-            Saving Opportunities for later research and easy access. Post your job openings, search for the perfect role, and manage your applications all in one place.
+            Sauvegardez des opportunites pour les consulter plus tard. Publiez vos offres, recherchez le role ideal et gerez vos candidatures en un seul endroit.
           </p>
         </div>
       </header>
@@ -22,16 +22,16 @@ export default function App(){
       <main className="max-w-6xl mx-auto px-4 pb-14 md:pb-20">
         <section className="glass-panel mb-8 p-5 md:p-7 reveal-in">
           <div className="section-header mb-5">
-            <h2 className="section-title">Create New Job</h2>
-            <span className="section-chip">Live Post</span>
+            <h2 className="section-title">Creer Un Nouvel Emploi</h2>
+            <span className="section-chip">Publication En Direct</span>
           </div>
           <JobForm />
         </section>
 
         <section className="glass-panel p-5 md:p-7 reveal-in" style={{animationDelay: '120ms'}}>
           <div className="section-header mb-5">
-            <h2 className="section-title">Jobs</h2>
-            <span className="section-chip">Realtime Feed</span>
+            <h2 className="section-title">Emplois</h2>
+            <span className="section-chip">Flux En Temps Reel</span>
           </div>
           <JobList />
         </section>

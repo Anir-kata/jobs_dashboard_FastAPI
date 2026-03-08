@@ -3,25 +3,32 @@ from typing import Optional
 from datetime import datetime
 
 
-class JobBase(BaseModel):
+class EmploiBase(BaseModel):
     title: str
     description: Optional[str] = None
     company: Optional[str] = None
     location: Optional[str] = None
 
 
-class JobCreate(JobBase):
+class CreationEmploi(EmploiBase):
     pass
 
 
-class JobUpdate(JobBase):
+class MiseAJourEmploi(EmploiBase):
     title: Optional[str] = None
 
 
-class Job(JobBase):
+class Emploi(EmploiBase):
     id: int
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
-    # Use Pydantic v2 config style
+    # Style de configuration Pydantic v2.
     model_config = ConfigDict(from_attributes=True)
+
+
+# Alias de compatibilite pour les anciens noms.
+JobBase = EmploiBase
+JobCreate = CreationEmploi
+JobUpdate = MiseAJourEmploi
+Job = Emploi

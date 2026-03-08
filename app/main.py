@@ -7,30 +7,30 @@ from contextlib import asynccontextmanager
 
 from . import models, schemas, database
 
-# setup basic logging
+# Configuration de base des logs.
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# middleware to log incoming requests
+# Middleware de journalisation des requetes entrantes.
 
 async def log_request(request: Request, call_next):
-    logger.info(f"Request: {request.method} {request.url}")
+    logger.info(f"Requete: {request.method} {request.url}")
     response = await call_next(request)
-    logger.info(f"Response status: {response.status_code}")
+    logger.info(f"Statut reponse: {response.status_code}")
     return response
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # create tables on startup
+    # Cree les tables au demarrage.
     models.Base.metadata.create_all(bind=database.engine)
     yield
 
 
 app = FastAPI(lifespan=lifespan)
-# add middleware
+# Ajoute le middleware HTTP de log.
 app.middleware('http')(log_request)
-# allow CORS for frontend
+# Autorise CORS pour le frontend.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -38,44 +38,58 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Use the shared database dependency from `app.database` so tests can override it
+# Utilise la dependance de base de donnees partagee pour les tests.
 from .database import get_db
 
 
 @app.get("/", tags=["root"])
 def read_root():
-    return {"message": "Job Data Pipeline is running"}
+    return {"message": "Le pipeline de donnees emploi est actif"}
 
 
-@app.post("/jobs/", response_model=schemas.Job, tags=["jobs"])
-def create_job(job: schemas.JobCreate, db: Session = Depends(get_db)):
-    db_job = models.Job(**job.model_dump())
-    db.add(db_job)
+@app.post("/emplois/", response_model=schemas.Emploi, tags=["emplois"])
+@app.post("/jobs/", response_model=schemas.Emploi, tags=["emplois"], include_in_schema=False)
+def creer_emploi(emploi: schemas.CreationEmploi, db: Session = Depends(get_db)):
+    db_emploi = models.Emploi(**emploi.model_dump())
+    db.add(db_emploi)
     db.commit()
-    db.refresh(db_job)
-    return db_job
+    db.refresh(db_emploi)
+    return db_emploi
 
 
-@app.get("/jobs/", response_model=list[schemas.Job], tags=["jobs"])
-def read_jobs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    stmt = select(models.Job).offset(skip).limit(limit)
+@app.get("/emplois/", response_model=list[schemas.Emploi], tags=["emplois"])
+@app.get("/jobs/", response_model=list[schemas.Emploi], tags=["emplois"], include_in_schema=False)
+def lire_emplois(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    stmt = select(models.Emploi).offset(skip).limit(limit)
     return db.execute(stmt).scalars().all()
 
 
-@app.get("/jobs/search", response_model=list[schemas.Job], tags=["jobs"])
-def search_jobs(query: str | None = None, company: str | None = None, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    stmt = select(models.Job)
-    if query:
-        stmt = stmt.where(models.Job.title.contains(query))
-    if company:
-        stmt = stmt.where(models.Job.company == company)
+@app.get("/emplois/recherche", response_model=list[schemas.Emploi], tags=["emplois"])
+@app.get("/jobs/search", response_model=list[schemas.Emploi], tags=["emplois"], include_in_schema=False)
+def rechercher_emplois(
+    requete: str | None = None,
+    entreprise: str | None = None,
+    query: str | None = None,
+    company: str | None = None,
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+):
+    stmt = select(models.Emploi)
+    valeur_recherche = requete or query
+    valeur_entreprise = entreprise or company
+    if valeur_recherche:
+        stmt = stmt.where(models.Emploi.title.contains(valeur_recherche))
+    if valeur_entreprise:
+        stmt = stmt.where(models.Emploi.company == valeur_entreprise)
     stmt = stmt.offset(skip).limit(limit)
     return db.execute(stmt).scalars().all()
 
 
-@app.post("/jobs/bulk", response_model=list[schemas.Job], tags=["jobs"])
-def bulk_create_jobs(jobs: list[schemas.JobCreate], db: Session = Depends(get_db)):
-    objs = [models.Job(**j.model_dump()) for j in jobs]
+@app.post("/emplois/lot", response_model=list[schemas.Emploi], tags=["emplois"])
+@app.post("/jobs/bulk", response_model=list[schemas.Emploi], tags=["emplois"], include_in_schema=False)
+def creer_emplois_lot(emplois: list[schemas.CreationEmploi], db: Session = Depends(get_db)):
+    objs = [models.Emploi(**e.model_dump()) for e in emplois]
     db.add_all(objs)
     db.commit()
     for o in objs:
@@ -83,33 +97,36 @@ def bulk_create_jobs(jobs: list[schemas.JobCreate], db: Session = Depends(get_db
     return objs
 
 
-@app.get("/jobs/{job_id}", response_model=schemas.Job, tags=["jobs"])
-def read_job(job_id: int, db: Session = Depends(get_db)):
-    job = db.get(models.Job, job_id)
-    if job is None:
-        raise HTTPException(status_code=404, detail="Job not found")
-    return job
+@app.get("/emplois/{emploi_id}", response_model=schemas.Emploi, tags=["emplois"])
+@app.get("/jobs/{emploi_id}", response_model=schemas.Emploi, tags=["emplois"], include_in_schema=False)
+def lire_emploi(emploi_id: int, db: Session = Depends(get_db)):
+    emploi = db.get(models.Emploi, emploi_id)
+    if emploi is None:
+        raise HTTPException(status_code=404, detail="Emploi introuvable")
+    return emploi
 
 
-@app.put("/jobs/{job_id}", response_model=schemas.Job, tags=["jobs"])
-def update_job(job_id: int, job_update: schemas.JobUpdate, db: Session = Depends(get_db)):
-    job = db.get(models.Job, job_id)
-    if job is None:
-        raise HTTPException(status_code=404, detail="Job not found")
-    update_data = job_update.model_dump(exclude_unset=True)
+@app.put("/emplois/{emploi_id}", response_model=schemas.Emploi, tags=["emplois"])
+@app.put("/jobs/{emploi_id}", response_model=schemas.Emploi, tags=["emplois"], include_in_schema=False)
+def mettre_a_jour_emploi(emploi_id: int, emploi_update: schemas.MiseAJourEmploi, db: Session = Depends(get_db)):
+    emploi = db.get(models.Emploi, emploi_id)
+    if emploi is None:
+        raise HTTPException(status_code=404, detail="Emploi introuvable")
+    update_data = emploi_update.model_dump(exclude_unset=True)
     for key, value in update_data.items():
-        setattr(job, key, value)
-    db.add(job)
+        setattr(emploi, key, value)
+    db.add(emploi)
     db.commit()
-    db.refresh(job)
-    return job
+    db.refresh(emploi)
+    return emploi
 
 
-@app.delete("/jobs/{job_id}", tags=["jobs"])
-def delete_job(job_id: int, db: Session = Depends(get_db)):
-    job = db.get(models.Job, job_id)
-    if job is None:
-        raise HTTPException(status_code=404, detail="Job not found")
-    db.delete(job)
+@app.delete("/emplois/{emploi_id}", tags=["emplois"])
+@app.delete("/jobs/{emploi_id}", tags=["emplois"], include_in_schema=False)
+def supprimer_emploi(emploi_id: int, db: Session = Depends(get_db)):
+    emploi = db.get(models.Emploi, emploi_id)
+    if emploi is None:
+        raise HTTPException(status_code=404, detail="Emploi introuvable")
+    db.delete(emploi)
     db.commit()
-    return {"ok": True}
+    return {"succes": True}

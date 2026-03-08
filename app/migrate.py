@@ -1,6 +1,6 @@
 """
-Quick migration to add timestamps to existing jobs table.
-Run with: python -m app.migrate
+Migration rapide pour ajouter les horodatages a la table jobs existante.
+Execution: python -m app.migrate
 """
 import sys
 from pathlib import Path
@@ -11,12 +11,12 @@ from app.database import engine
 
 with engine.connect() as conn:
     try:
-        # Add columns if they don't exist
+        # Ajoute les colonnes si elles n'existent pas.
         conn.execute(text("""
             ALTER TABLE jobs 
             ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL;
         """))
-        print("✓ Added created_at column")
+        print("[OK] Colonne created_at ajoutee")
     except Exception as e:
         print(f"created_at: {e}")
     
@@ -25,9 +25,9 @@ with engine.connect() as conn:
             ALTER TABLE jobs 
             ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL;
         """))
-        print("✓ Added updated_at column")
+        print("[OK] Colonne updated_at ajoutee")
     except Exception as e:
         print(f"updated_at: {e}")
     
     conn.commit()
-    print("Migration complete")
+    print("Migration terminee")

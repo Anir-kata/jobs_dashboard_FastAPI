@@ -23,35 +23,39 @@ async function parseResponse(res){
 }
 
 export async function fetchJobs(params){
-  const url = new URL(BASE + '/jobs/')
+  const url = new URL(BASE + '/emplois/')
   Object.entries(params||{}).forEach(([k,v]) => { if(v!==undefined) url.searchParams.append(k, v) })
   const res = await fetch(url)
   return parseResponse(res)
 }
 
 export async function createJob(data){
-  const res = await fetch(BASE + '/jobs/', {method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)})
+  const res = await fetch(BASE + '/emplois/', {method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)})
   return parseResponse(res)
 }
 
 export async function bulkCreate(jobs){
-  const res = await fetch(BASE + '/jobs/bulk', {method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(jobs)})
+  const res = await fetch(BASE + '/emplois/lot', {method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(jobs)})
   return parseResponse(res)
 }
 
 export async function searchJobs(params){
-  const url = new URL(BASE + '/jobs/search')
-  Object.entries(params||{}).forEach(([k,v]) => { if(v!==undefined) url.searchParams.append(k, v) })
+  const url = new URL(BASE + '/emplois/recherche')
+  const paramsFrancais = {
+    requete: params?.query,
+    entreprise: params?.company,
+  }
+  Object.entries(paramsFrancais).forEach(([k,v]) => { if(v!==undefined) url.searchParams.append(k, v) })
   const res = await fetch(url)
   return parseResponse(res)
 }
 
 export async function updateJob(id, data){
-  const res = await fetch(BASE + `/jobs/${id}`, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)})
+  const res = await fetch(BASE + `/emplois/${id}`, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)})
   return parseResponse(res)
 }
 
 export async function deleteJob(id){
-  const res = await fetch(BASE + `/jobs/${id}`, {method:'DELETE'})
+  const res = await fetch(BASE + `/emplois/${id}`, {method:'DELETE'})
   return parseResponse(res)
 }

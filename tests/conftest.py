@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from app.database import Base, get_db
 from app.main import app
 
-# Use an in-memory SQLite database for tests
+# Utilise une base SQLite en memoire pour les tests.
 test_engine = create_engine(
     "sqlite:///:memory:",
     connect_args={"check_same_thread": False},
@@ -18,7 +18,7 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_
 
 @pytest.fixture(scope="module")
 def setup_db():
-    # create tables on the test engine
+    # Cree les tables sur le moteur de test.
     Base.metadata.create_all(bind=test_engine)
     yield
     Base.metadata.drop_all(bind=test_engine)
@@ -26,7 +26,7 @@ def setup_db():
 
 @pytest.fixture(scope="module")
 def client(setup_db):
-    # override dependency to provide a new session per request
+    # Surcharge la dependance pour fournir une session par requete.
     def override_get_db():
         db = TestingSessionLocal()
         try:

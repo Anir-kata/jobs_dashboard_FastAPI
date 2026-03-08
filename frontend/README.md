@@ -1,6 +1,6 @@
-Front-end React app (Vite)
+Application front-end React (Vite)
 
-Quick start:
+Demarrage rapide:
 
 ```bash
 cd frontend
@@ -8,8 +8,8 @@ npm install
 npm run dev
 ```
 
-By default the front-end expects the API at `http://127.0.0.1:8000`. To change, set `VITE_API_URL` in your environment (for example: `export VITE_API_URL=https://api.example.com`).
+Par defaut, le front-end attend l'API a `http://127.0.0.1:8000`. Pour changer, definissez `VITE_API_URL` dans votre environnement (par exemple: `export VITE_API_URL=https://api.example.com`).
 
-Pages/components:
-- `JobForm` — create job and bulk-add sample jobs
-- `JobList` — list, search, and delete jobs
+Pages/composants:
+- `JobForm` - creer un emploi et ajouter des emplois exemples en lot
+- `JobList` - lister, rechercher et supprimer des emplois

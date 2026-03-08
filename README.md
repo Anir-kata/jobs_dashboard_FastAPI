@@ -1,9 +1,8 @@
 # Backend de Job avec FastAPI
 
-<!-- CI status badge: workflow runs on GitHub Actions -->
 ![CI](https://github.com/Anir-kata/job_backend_FastAPI/actions/workflows/ci.yml/badge.svg)
 
-Ce dépôt contient une application FastAPI simple qui fournit des opérations CRUD pour une ressource `Job`, supportée par une base de données PostgreSQL utilisant SQLAlchemy.
+Ce depot contient une application FastAPI simple qui fournit des operations CRUD pour une ressource `Emploi`, supportee par une base de donnees PostgreSQL utilisant SQLAlchemy.
 
 ## 📦 Prérequis
 
@@ -29,7 +28,7 @@ Créez la base de données dans PostgreSQL avant d'exécuter l'application :
 CREATE DATABASE jobdb;
 ```
 
-L'application créera automatiquement la table `jobs` au démarrage.
+L'application creera automatiquement la table `jobs` au demarrage.
 
 ## 🚀 Lancer le serveur
 
@@ -43,13 +42,15 @@ L'API sera disponible à `http://127.0.0.1:8000` et la documentation interactive
 
 ## 🔁 Points de terminaison CRUD
 
-| Méthode | Chemin            | Description                         |
-|---------|-------------------|-------------------------------------|
-| POST    | `/jobs/`          | Crée une nouvelle fiche de job      |
-| GET     | `/jobs/`          | Récupère la liste des jobs          |
-| GET     | `/jobs/{id}`      | Obtient un job spécifique par ID    |
-| PUT     | `/jobs/{id}`      | Met à jour les champs d'un job      |
-| DELETE  | `/jobs/{id}`      | Supprime une fiche de job           |
+| Methode | Chemin                 | Description                              |
+|---------|------------------------|------------------------------------------|
+| POST    | `/emplois/`            | Cree une nouvelle fiche emploi           |
+| GET     | `/emplois/`            | Recupere la liste des emplois            |
+| GET     | `/emplois/{id}`        | Obtient un emploi specifique par ID      |
+| PUT     | `/emplois/{id}`        | Met a jour les champs d'un emploi        |
+| DELETE  | `/emplois/{id}`        | Supprime une fiche emploi                |
+| GET     | `/emplois/recherche`   | Recherche par `requete` et `entreprise` |
+| POST    | `/emplois/lot`         | Creation en lot d'emplois                |
 
 ### Exemple de corps de requête pour création/mise à jour
 
@@ -83,7 +84,7 @@ pytest
 
 ## 🖥 Frontend
 
-Un client React léger est inclus sous `frontend/`. Il consomme les endpoints de l'API pour
+Un client React leger est inclus sous `frontend/`. Il consomme les endpoints de l'API pour
 créer et lister des emplois, effectuer des recherches et supprimer des entrées.
 
 Pour démarrer l'interface :

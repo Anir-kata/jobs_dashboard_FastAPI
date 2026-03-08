@@ -9,12 +9,12 @@ export default class ErrorBoundary extends React.Component {
   static getDerivedStateFromError(error){
     return {
       hasError: true,
-      message: error?.message || 'Unexpected rendering error'
+      message: error?.message || 'Erreur de rendu inattendue'
     }
   }
 
   componentDidCatch(error, info){
-    console.error('UI crash captured by ErrorBoundary:', error, info)
+    console.error('Crash UI capture par ErrorBoundary :', error, info)
   }
 
   onReload = () => {
@@ -26,12 +26,12 @@ export default class ErrorBoundary extends React.Component {
       return (
         <div className="app-shell min-h-screen flex items-center justify-center px-4">
           <div className="glass-panel w-full max-w-xl p-6 md:p-8 text-center">
-            <h2 className="section-title">A rendering error occurred</h2>
+            <h2 className="section-title">Une erreur de rendu est survenue</h2>
             <p className="mt-3 text-slate-200/90">
               {this.state.message}
             </p>
             <button type="button" className="btn-primary mt-5" onClick={this.onReload}>
-              Reload App
+              Recharger l'application
             </button>
           </div>
         </div>

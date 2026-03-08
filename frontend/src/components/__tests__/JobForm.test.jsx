@@ -10,8 +10,8 @@ vi.mock('../../api', () => ({
 describe('JobForm', () => {
   test('submits form', async () => {
     render(<JobForm />)
-    fireEvent.change(screen.getByPlaceholderText('Title'), {target:{value:'X'}})
-    fireEvent.click(screen.getByText('Create'))
-    expect(await screen.findByPlaceholderText('Title')).toHaveValue('')
+    fireEvent.change(screen.getByPlaceholderText('Titre'), {target:{value:'X'}})
+    fireEvent.click(screen.getByText('Creer'))
+    expect(await screen.findByPlaceholderText('Titre')).toHaveValue('')
   })
 })
