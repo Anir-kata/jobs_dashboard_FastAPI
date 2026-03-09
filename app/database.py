@@ -4,7 +4,12 @@ import os
 
 DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://postgres:anir@localhost:5432/jobdb')
 
-engine = create_engine(DATABASE_URL)
+engine_kwargs = {}
+if DATABASE_URL.startswith("sqlite"):
+    # Allow SQLite connections across threads used by FastAPI TestClient.
+    engine_kwargs["connect_args"] = {"check_same_thread": False}
+
+engine = create_engine(DATABASE_URL, **engine_kwargs)
 
 SessionLocal = sessionmaker(
     autocommit=False,
