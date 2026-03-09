@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react'
-import { fetchJobs, searchJobs, deleteJob } from '../api'
+import { fetchJobs, searchJobs, deleteJob, importJobs } from '../api'
 
 export default function JobList(){
   const [jobs, setJobs] = useState([])
   const [q, setQ] = useState('')
   const [company, setCompany] = useState('')
   const [loading, setLoading] = useState(false)
+  const [importing, setImporting] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [successMsg, setSuccessMsg] = useState('')
 
   function getMessage(error){
     if (error?.message) return error.message
@@ -23,6 +25,21 @@ export default function JobList(){
       setErrorMsg(getMessage(error))
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function onImportInternet(){
+    setErrorMsg('')
+    setSuccessMsg('')
+    setImporting(true)
+    try {
+      const imported = await importJobs({query: q || undefined, limit: 10})
+      await load()
+      setSuccessMsg(`${imported.length} offre(s) importee(s) depuis Internet.`)
+    } catch (error) {
+      setErrorMsg(getMessage(error))
+    } finally {
+      setImporting(false)
     }
   }
 
@@ -61,6 +78,7 @@ export default function JobList(){
   return (
     <div className="space-y-5">
       {errorMsg && <p className="alert-box alert-error">{errorMsg}</p>}
+      {successMsg && <p className="alert-box alert-success">{successMsg}</p>}
       <form onSubmit={onSearch} className="search-wrap">
         <input
           className="input-field flex-1 min-w-[200px]"
@@ -75,6 +93,14 @@ export default function JobList(){
           onChange={e=>setCompany(e.target.value)}
         />
         <button type="submit" className="btn-primary">Rechercher</button>
+        <button
+          type="button"
+          onClick={onImportInternet}
+          disabled={importing || loading}
+          className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {importing ? 'Import en cours...' : 'Importer depuis Internet'}
+        </button>
         <button type="button" onClick={load} className="btn-secondary">Reinitialiser</button>
       </form>
 

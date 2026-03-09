@@ -59,3 +59,12 @@ export async function deleteJob(id){
   const res = await fetch(BASE + `/emplois/${id}`, {method:'DELETE'})
   return parseResponse(res)
 }
+
+export async function importJobs(params){
+  const url = new URL(BASE + '/emplois/import')
+  Object.entries(params || {}).forEach(([k, v]) => {
+    if (v !== undefined && v !== null && v !== '') url.searchParams.append(k, v)
+  })
+  const res = await fetch(url, {method: 'POST'})
+  return parseResponse(res)
+}
