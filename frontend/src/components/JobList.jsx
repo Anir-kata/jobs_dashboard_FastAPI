@@ -35,7 +35,7 @@ export default function JobList(){
     try {
       const imported = await importJobs({query: q || undefined, limit: 10})
       await load()
-      setSuccessMsg(`${imported.length} offre(s) importee(s) depuis Internet.`)
+      setSuccessMsg(`${imported.length} Offres importees.`)
     } catch (error) {
       setErrorMsg(getMessage(error))
     } finally {
