@@ -80,3 +80,40 @@ def test_timestamps_present(client):
     job = r.json()
     assert "created_at" in job and job["created_at"]
     assert "updated_at" in job and job["updated_at"]
+
+
+def test_import_jobs_from_internet_with_dedup(client, monkeypatch):
+    from app import main
+
+    def fake_fetch_remotive_jobs(search=None, limit=20):
+        return [
+            {
+                "title": "Python Backend Engineer",
+                "description": "Remote backend role",
+                "company": "RemoteCo",
+                "location": "Worldwide",
+            },
+            {
+                "title": "React Frontend Developer",
+                "description": "Frontend role",
+                "company": "WebCo",
+                "location": "Europe",
+            },
+        ][:limit]
+
+    monkeypatch.setattr(main, "fetch_remotive_jobs", fake_fetch_remotive_jobs)
+
+    first_import = client.post("/emplois/import", params={"query": "python", "limit": 2})
+    assert first_import.status_code == 200
+    first_data = first_import.json()
+    assert len(first_data) == 2
+
+    second_import = client.post("/emplois/import", params={"query": "python", "limit": 2})
+    assert second_import.status_code == 200
+    second_data = second_import.json()
+    assert second_data == []
+
+
+def test_import_jobs_invalid_limit(client):
+    response = client.post("/emplois/import", params={"limit": 0})
+    assert response.status_code == 400

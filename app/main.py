@@ -6,6 +6,7 @@ from sqlalchemy import select
 from contextlib import asynccontextmanager
 
 from . import models, schemas, database
+from .services.job_sources import fetch_remotive_jobs
 
 # Configuration de base des logs.
 logging.basicConfig(level=logging.INFO)
@@ -95,6 +96,44 @@ def creer_emplois_lot(emplois: list[schemas.CreationEmploi], db: Session = Depen
     for o in objs:
         db.refresh(o)
     return objs
+
+
+@app.post("/emplois/import", response_model=list[schemas.Emploi], tags=["emplois"])
+def importer_emplois_depuis_internet(
+    query: str | None = None,
+    limit: int = 20,
+    db: Session = Depends(get_db),
+):
+    if limit < 1 or limit > 100:
+        raise HTTPException(status_code=400, detail="Le parametre limit doit etre entre 1 et 100")
+
+    try:
+        imported_jobs = fetch_remotive_jobs(search=query, limit=limit)
+    except Exception as exc:
+        logger.exception("Erreur pendant la recuperation des offres externes")
+        raise HTTPException(status_code=502, detail="Impossible de recuperer les offres externes") from exc
+
+    created: list[models.Emploi] = []
+
+    for payload in imported_jobs:
+        stmt = select(models.Emploi).where(
+            models.Emploi.title == payload["title"],
+            models.Emploi.company == payload["company"],
+            models.Emploi.location == payload["location"],
+        )
+        exists = db.execute(stmt).scalars().first()
+        if exists:
+            continue
+
+        emploi = models.Emploi(**payload)
+        db.add(emploi)
+        created.append(emploi)
+
+    db.commit()
+    for emploi in created:
+        db.refresh(emploi)
+
+    return created
 
 
 @app.get("/emplois/{emploi_id}", response_model=schemas.Emploi, tags=["emplois"])
